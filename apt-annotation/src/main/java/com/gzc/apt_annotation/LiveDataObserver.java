@@ -1,4 +1,4 @@
-package com.gzc.livedatabus;
+package com.gzc.apt_annotation;
 
 import androidx.lifecycle.LifecycleOwner;
 
@@ -8,5 +8,5 @@ import androidx.lifecycle.LifecycleOwner;
  * Describe:
  */
 public interface LiveDataObserver {
-    void observe(LifecycleOwner owner,String key);
+    void observe(LifecycleOwner owner, String key);
 }

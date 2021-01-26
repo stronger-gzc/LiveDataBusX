@@ -1,19 +1,17 @@
-package com.gzc.livedatabus;
+package com.gzc.apt_annotation;
 
-import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * User: Administrator
- * Date: 2021-01-24 19:33
- * Describe:
+ * author：gzc
+ * date：2021/1/26
+ * describe：
  */
-@Documented
-@Retention(RetentionPolicy.RUNTIME)
-@Target({ElementType.METHOD})
+@Retention(RetentionPolicy.CLASS)
+@Target(ElementType.METHOD)
 public @interface Observe {
     ThreadMode threadMode() default ThreadMode.MAIN;
 
