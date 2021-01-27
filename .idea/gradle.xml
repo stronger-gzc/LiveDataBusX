@@ -12,9 +12,9 @@
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/app" />
-            <option value="$PROJECT_DIR$/apt-annotation" />
-            <option value="$PROJECT_DIR$/apt-library" />
-            <option value="$PROJECT_DIR$/apt-processor" />
+            <option value="$PROJECT_DIR$/livedatabus" />
+            <option value="$PROJECT_DIR$/livedatabus-annotation" />
+            <option value="$PROJECT_DIR$/livedatabus-processor" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />

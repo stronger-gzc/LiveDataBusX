@@ -1,5 +1,5 @@
-include ':apt-library'
-include ':apt-processor'
-include ':apt-annotation'
+include ':livedatabus'
+include ':livedatabus-processor'
+include ':livedatabus-annotation'
 include ':app'
 rootProject.name = "LiveDataBus"

@@ -9,12 +9,15 @@
           <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.google.guava/guava/18.0/cce0823396aa693798f8882e64213b1772032b09/guava-18.0.jar" />
           <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.google.auto/auto-common/0.3/4073ab16ab4aceb9a217273da6442166bf51ae16/auto-common-0.3.jar" />
         </processorPath>
-        <module name="apt-processor" />
+        <module name="livedatabus-processor" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="apt-annotation" target="1.7" />
       <module name="apt-processor" target="1.7" />
+      <module name="livedatabus-annotation" target="1.7" />
+      <module name="livedatabus-annotion" target="1.7" />
+      <module name="livedatabus-processor" target="1.7" />
     </bytecodeTargetLevel>
   </component>
 </project>
