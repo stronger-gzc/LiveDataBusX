@@ -14,7 +14,7 @@ android {
 
         javaCompileOptions {
             annotationProcessorOptions {
-                arguments = [observers : 'com.gzc.myapplication.Observers']
+                arguments = [observers : 'com.gzc.livedatabus.LiveDataObservers']
             }
         }
     }

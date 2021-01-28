@@ -30,14 +30,13 @@ import javax.tools.JavaFileObject;
  */
 @AutoService(Processor.class)
 @SupportedSourceVersion(SourceVersion.RELEASE_7)
-@SupportedAnnotationTypes({"com.livedatabus.annotion.Observe"})
-@SupportedOptions(value = {"observers"})
+@SupportedAnnotationTypes({Constants.ANNOTATION})
+@SupportedOptions(value = {Constants.OBSERVERS})
 public class ObserveProcessor extends AbstractProcessor {
-    public static final String OBSERVERS = "observers";
 
     private Elements mElementUtils;
     private Filer mFilerUtils;
-    private Map<String, ObserverClassCreator> mProxyMap = new HashMap<>();
+    private Map<String, LiveDataObserverCreator> map = new HashMap<>();
     private Log log;
 
     @Override
@@ -52,28 +51,28 @@ public class ObserveProcessor extends AbstractProcessor {
 
     @Override
     public boolean process(Set<? extends TypeElement> set, RoundEnvironment roundEnvironment) {
-        mProxyMap.clear();
+        map.clear();
         //得到所有的注解
         Set<? extends Element> elements = roundEnvironment.getElementsAnnotatedWith(Observe.class);
         for (Element element : elements) {
             TypeElement classElement = (TypeElement) element.getEnclosingElement();
             //获得全类名
             String fullClassName = classElement.getQualifiedName().toString();
-            ObserverClassCreator proxy = mProxyMap.get(fullClassName);
-            if (proxy == null) {
-                proxy = new ObserverClassCreator(mElementUtils, classElement,processingEnv);
-                mProxyMap.put(fullClassName, proxy);
+            LiveDataObserverCreator liveDataObserverCreator = map.get(fullClassName);
+            if (liveDataObserverCreator == null) {
+                liveDataObserverCreator = new LiveDataObserverCreator(mElementUtils, classElement,processingEnv);
+                map.put(fullClassName, liveDataObserverCreator);
             }
-            proxy.putElement(element);
+            liveDataObserverCreator.putElement(element);
         }
-
-        String observers = processingEnv.getOptions().get(OBSERVERS);
+        //通过在项目的gradle中设置的observers值拿到包名
+        String observers = processingEnv.getOptions().get(Constants.OBSERVERS);
         int period = observers.lastIndexOf('.');
         String myPackage = period > 0 ? observers.substring(0, period) : null;
-        ObserverMapClassCreator creator = new ObserverMapClassCreator(myPackage);
+        ObserversCreator creator = new ObserversCreator(myPackage,elements);
 
         try {
-            JavaFileObject sourceFile = processingEnv.getFiler().createSourceFile(observers);
+            JavaFileObject sourceFile = mFilerUtils.createSourceFile(observers);
             Writer writer = sourceFile.openWriter();
             writer.write(creator.generateClassCode());
             writer.flush();
@@ -84,12 +83,12 @@ public class ObserveProcessor extends AbstractProcessor {
 
 
         //通过遍历mProxyMap，创建java文件
-        for (String key : mProxyMap.keySet()) {
-            ObserverClassCreator proxyInfo = mProxyMap.get(key);
+        for (String key : map.keySet()) {
+            LiveDataObserverCreator liveDataObserverCreator = map.get(key);
             try {
-                JavaFileObject jfo = processingEnv.getFiler().createSourceFile(proxyInfo.getProxyClassFullName());
+                JavaFileObject jfo = mFilerUtils.createSourceFile(liveDataObserverCreator.getClassFullName());
                 Writer writer = jfo.openWriter();
-                writer.write(proxyInfo.generateClassCode());
+                writer.write(liveDataObserverCreator.generateClassCode());
                 writer.flush();
                 writer.close();
             } catch (IOException e) {

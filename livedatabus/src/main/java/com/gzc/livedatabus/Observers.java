@@ -8,5 +8,5 @@ import java.util.Map;
  * describe：
  */
 public interface Observers {
-    Map<String,LiveDataObserver> getObserver(String key);
+    Map<String,LiveDataObserver> getObservers();
 }

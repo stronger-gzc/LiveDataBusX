@@ -1,0 +1,25 @@
+package com.gzc.livedatabus;
+
+import androidx.lifecycle.LifecycleOwner;
+
+import com.livedatabus.annotion.ThreadMode;
+
+/**
+ * author：gzc
+ * date：2021/1/28
+ * describe：
+ */
+public class Observation {
+    //ThreadMode threadMode, final LifecycleOwner owner, final Object event, final String methodName
+    ThreadMode threadMode;
+    LifecycleOwner owner;
+    Object event;
+    String methodName;
+
+    public Observation(ThreadMode threadMode, LifecycleOwner owner, Object event, String methodName) {
+        this.threadMode = threadMode;
+        this.owner = owner;
+        this.event = event;
+        this.methodName = methodName;
+    }
+}

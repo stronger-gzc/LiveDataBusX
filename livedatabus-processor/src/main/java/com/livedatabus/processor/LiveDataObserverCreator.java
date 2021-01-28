@@ -19,9 +19,9 @@ import javax.lang.model.util.Elements;
 /**
  * author：gzc
  * date：2021/1/26
- * describe：
+ * describe：LifecycleOwner调用Bus进行observe的类
  */
-public class ObserverClassCreator {
+public class LiveDataObserverCreator {
     private String mObserverClassName;
     private String mPackageName;
     private String mClassName;//所属类名
@@ -29,13 +29,13 @@ public class ObserverClassCreator {
     private List<Element> mVariableElements = new ArrayList<>();
     private ProcessingEnvironment processingEnv;
 
-    public ObserverClassCreator(Elements elementUtils, TypeElement classElement, ProcessingEnvironment processingEnv) {
+    public LiveDataObserverCreator(Elements elementUtils, TypeElement classElement, ProcessingEnvironment processingEnv) {
         this.mTypeElement = classElement;
         PackageElement packageElement = elementUtils.getPackageOf(mTypeElement);
         String packageName = packageElement.getQualifiedName().toString();
         mClassName = mTypeElement.getSimpleName().toString();
         this.mPackageName = packageName;
-        this.mObserverClassName = mClassName + "LiveDataObserver";
+        this.mObserverClassName = mClassName + Constants.SUFFIX;
         this.processingEnv = processingEnv;
 
     }
@@ -52,12 +52,13 @@ public class ObserverClassCreator {
     public String generateClassCode() {
         StringBuilder classCode = new StringBuilder();
         classCode
-                .append("package "+mPackageName+";")
+                .append("package "+mPackageName+";\n\n")
                 .append("import androidx.lifecycle.LifecycleOwner;\n\n")
                 .append("import androidx.lifecycle.Observer;\n\n")
                 .append("import com.gzc.livedatabus.LiveDataObserver;\n\n")
                 .append("import com.gzc.livedatabus.Bus;\n\n")
                 .append("import java.lang.reflect.Method;\n\n")
+                .append("import static com.livedatabus.annotion.ThreadMode.*;\n\n")
                 .append("public class " + mObserverClassName + " implements LiveDataObserver{\n")
                 .append(generateMethodsCode())
                 .append("\n}");
@@ -109,7 +110,7 @@ public class ObserverClassCreator {
                     .append(".observe(owner, new Observer<" + eventClass + ">() {\n")
                     .append("@Override\n")
                     .append("public void onChanged(" + eventClass + " bean) {\n")
-                    .append(generateReflectCode(method.getSimpleName().toString(), eventClass))
+                    .append(generateReflectCode(threadMode,method.getSimpleName().toString(), eventClass))
                     .append("}\n")
                     .append("});\n");
         }
@@ -118,15 +119,11 @@ public class ObserverClassCreator {
         return methodsClass.toString();
     }
 
-    private String generateReflectCode(String methodName, String paramClassName) {
+    private String generateReflectCode(ThreadMode threadMode,String methodName, String paramClassName) {
+        //.postToThread(new Observation(MAIN,owner,bean,"testBean1"));
         StringBuilder reflectCode = new StringBuilder();
-        reflectCode.append("try{\n")
-                .append("Method method = owner.getClass().getDeclaredMethod(\"" + methodName + "\"," + paramClassName + ".class);\n")
-                .append("method.setAccessible(true);\n")
-                .append("method.invoke(owner,bean);\n")
-                .append("}catch(Exception e){\n")
-                .append("e.printStackTrace();\n")
-                .append("}\n");
+        reflectCode.append("LiveDataBus.getInstance()\n")
+                .append(".postToThread(new Observation("+threadMode+",owner,bean,\""+methodName+"\"));\n");
 
         return reflectCode.toString();
     }
@@ -167,8 +164,12 @@ public class ObserverClassCreator {
         return mPackageName;
     }
 
-    public String getProxyClassFullName() {
+    public String getClassFullName() {
         return mPackageName + "." + mObserverClassName;
+    }
+
+    public String getClassName(){
+        return mObserverClassName;
     }
 
     public TypeElement getTypeElement() {

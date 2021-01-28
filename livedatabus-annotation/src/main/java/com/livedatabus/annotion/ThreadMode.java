@@ -6,6 +6,6 @@ package com.livedatabus.annotion;
  * Describe:
  */
 public enum ThreadMode {
-    MAIN,POSTING
+    MAIN,BACKGROUND,ASYNC
 
 }
