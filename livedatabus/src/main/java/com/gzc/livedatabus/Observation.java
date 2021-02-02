@@ -15,11 +15,18 @@ public class Observation {
     LifecycleOwner owner;
     Object event;
     String methodName;
+    boolean sticky;
+    String key;
 
     public Observation(ThreadMode threadMode, LifecycleOwner owner, Object event, String methodName) {
         this.threadMode = threadMode;
         this.owner = owner;
         this.event = event;
         this.methodName = methodName;
+    }
+
+    public Observation(boolean sticky, String key) {
+        this.sticky = sticky;
+        this.key = key;
     }
 }

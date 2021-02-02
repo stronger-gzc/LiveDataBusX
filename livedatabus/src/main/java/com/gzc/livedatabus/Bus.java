@@ -1,5 +1,7 @@
 package com.gzc.livedatabus;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.LiveData;
@@ -41,9 +43,29 @@ final class Bus {
         return busMutableLiveData;
     }
 
-    public synchronized BusMutableLiveData<Object> with(String key,boolean sticky){
-        return with(key,Object.class,sticky);
+    public synchronized BusMutableLiveData with(String key,boolean sticky){
+        if(!busMap.containsKey(key)){
+            busMap.put(key,new BusMutableLiveData<Object>());
+        }
+        BusMutableLiveData busMutableLiveData = (BusMutableLiveData) busMap.get(key);
+        busMutableLiveData.setSticky(sticky);
+        return busMutableLiveData;
     }
+
+    /**
+     * 设置粘性特征
+     * @param key
+     * @param sticky
+     */
+    public synchronized Bus setSticky(String key,boolean sticky){
+        if(busMap.containsKey(key)){
+            busMap.put(key,new BusMutableLiveData<Object>());
+        }
+        BusMutableLiveData busMutableLiveData = (BusMutableLiveData) busMap.get(key);
+        busMutableLiveData.setSticky(sticky);
+        return bus;
+    }
+
 
     public synchronized BusMutableLiveData<Object>setKey(String key){
         if(!busMap.containsKey(key)){
@@ -85,6 +107,7 @@ final class Bus {
         @Override
         public void observe(@NonNull LifecycleOwner owner, @NonNull Observer<? super T> observer) {
             super.observe(owner, observer);
+            Log.e("guanzhenchuang","sticky:====>"+sticky);
             if(!sticky) {
                 hook(observer);
             }

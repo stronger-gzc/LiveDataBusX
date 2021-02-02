@@ -1,13 +1,9 @@
 package com.gzc.livedatabus;
 
-import android.os.Looper;
 import android.util.Log;
 
 import androidx.lifecycle.LifecycleOwner;
 
-import com.livedatabus.annotion.ThreadMode;
-
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
@@ -26,7 +22,9 @@ public class LiveDataBus {
 
     private static LiveDataBus sInstance;
 
-    private Map<String,LiveDataObserver>observerMap = new HashMap<>();
+    private Map<String,LiveDataObserver> liveDataObserverMap = new HashMap<>();
+
+    private Map<String,Observation>observationMap = new HashMap<>();
 
     private final ExecutorService executorService;
 
@@ -62,8 +60,9 @@ public class LiveDataBus {
      */
     public void post(String key,Object object){
         if(object!=null){
+            boolean sticky = observationMap.get(object.getClass().getName()).sticky;
             Bus.getInstance()
-                    .setKey(key)
+                    .with(key,sticky)
                     .postValue(object);
         }
     }
@@ -76,8 +75,10 @@ public class LiveDataBus {
      */
     public void post(String key,String dynamicKey,Object object){
         if(object!=null){
+            String combinationKey = key+"::"+dynamicKey;
+            boolean sticky = observationMap.get(object.getClass().getName()).sticky;
             Bus.getInstance()
-                    .setKey(key+"::"+dynamicKey)
+                    .with(combinationKey,sticky)
                     .postValue(object);
 
         }
@@ -88,7 +89,11 @@ public class LiveDataBus {
      * @param observers
      */
     public void setObservers(Observers observers){
-        observerMap.putAll(observers.getObservers());
+        liveDataObserverMap.putAll(observers.getObservers());
+    }
+
+    public void addObservation(String key,Observation observation){
+        observationMap.put(key,observation);
     }
 
     /**
@@ -105,8 +110,16 @@ public class LiveDataBus {
      * @param dynamicKey 动态key
      */
     public void observe(LifecycleOwner owner,String dynamicKey){
-        observerMap.get(owner.getClass().getName())
+        liveDataObserverMap.get(owner.getClass().getName())
                 .observe(owner,dynamicKey);
+    }
+
+    public void removeSticky(Object event){
+        if(event!=null) {
+            String key = observationMap.get(event.getClass().getName()).key;
+            Bus.getInstance()
+                    .setSticky(key,false);
+        }
     }
 
     /**

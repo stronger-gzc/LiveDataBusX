@@ -15,6 +15,7 @@ import javax.lang.model.element.TypeElement;
 import javax.lang.model.element.VariableElement;
 import javax.lang.model.type.TypeMirror;
 import javax.lang.model.util.Elements;
+import javax.rmi.CORBA.Util;
 
 /**
  * author：gzc
@@ -52,7 +53,7 @@ public class LiveDataObserverCreator {
     public String generateClassCode() {
         StringBuilder classCode = new StringBuilder();
         classCode
-                .append("package "+mPackageName+";\n\n")
+                .append("package " + mPackageName + ";\n\n")
                 .append("import androidx.lifecycle.LifecycleOwner;\n\n")
                 .append("import androidx.lifecycle.Observer;\n\n")
                 .append("import com.gzc.livedatabus.LiveDataObserver;\n\n")
@@ -72,13 +73,13 @@ public class LiveDataObserverCreator {
         StringBuilder methodsClass = new StringBuilder();
         methodsClass
                 .append("@Override\n")
-                .append("public void observe(final LifecycleOwner owner , String dynamicKey){\n");
+                .append("public void observe(final LifecycleOwner owner , final String dynamicKey){\n");
 
         for (Element element : mVariableElements) {
             Observe annotation = element.getAnnotation(Observe.class);
             //取出Observe中注解的值
             ThreadMode threadMode = annotation.threadMode();
-            String key = annotation.key();
+            String annotationKey = annotation.key();
             boolean append = annotation.append();
             boolean sticky = annotation.sticky();
 
@@ -92,25 +93,31 @@ public class LiveDataObserverCreator {
             TypeMirror paramType = param.asType();
             TypeElement paramElement = (TypeElement) processingEnv.getTypeUtils().asElement(paramType);
             String eventClass = getClassString(paramElement, mPackageName);
-            methodsClass.append("Bus.getInstance()\n");
 
-            if (!Utils.isEmpty(key)) {
-                if (append) {
-                    methodsClass.append(".with(\"" + key + "::\"+dynamicKey," + eventClass + ".class," + sticky + ")\n");
-                } else {
-                    methodsClass.append(".with(\"" + key + "\"," + eventClass + ".class," + sticky + ")\n");
-                }
-            } else {
+            if (Utils.isEmpty(annotationKey)) {
                 throw new RuntimeException("key不能为空");
-
             }
+
+            String key = null;
+            //根据append来决定key值
+            if (append) {
+                key = "\"" + annotationKey + "::\"+dynamicKey";
+            } else {
+                key = "\"" + annotationKey + "\"";
+            }
+
+            methodsClass.append("LiveDataBus.getInstance()\n")
+                    .append(".addObservation(\"" + eventClass + "\", new Observation(" + sticky + "," + key + "));\n\n");
+
+            methodsClass.append("Bus.getInstance()\n")
+                    .append(".with(" + key + "," + eventClass + ".class," + sticky + ")\n");
 
 
             methodsClass
                     .append(".observe(owner, new Observer<" + eventClass + ">() {\n")
                     .append("@Override\n")
                     .append("public void onChanged(" + eventClass + " bean) {\n")
-                    .append(generateReflectCode(threadMode,method.getSimpleName().toString(), eventClass))
+                    .append(generateOnChangeMethodCode(threadMode, method.getSimpleName().toString()))
                     .append("}\n")
                     .append("});\n");
         }
@@ -119,13 +126,16 @@ public class LiveDataObserverCreator {
         return methodsClass.toString();
     }
 
-    private String generateReflectCode(ThreadMode threadMode,String methodName, String paramClassName) {
-        //.postToThread(new Observation(MAIN,owner,bean,"testBean1"));
-        StringBuilder reflectCode = new StringBuilder();
-        reflectCode.append("LiveDataBus.getInstance()\n")
-                .append(".postToThread(new Observation("+threadMode+",owner,bean,\""+methodName+"\"));\n");
+    private String generateOnChangeMethodCode(ThreadMode threadMode, String methodName) {
 
-        return reflectCode.toString();
+        StringBuilder onChangeMethodCode = new StringBuilder();
+
+        onChangeMethodCode.append("Observation observation = new Observation(" + threadMode + ",owner,bean,\"" + methodName + "\");\n\n");
+
+        onChangeMethodCode.append("LiveDataBus.getInstance()\n")
+                .append(".postToThread(observation);\n");
+
+        return onChangeMethodCode.toString();
     }
 
     private String getClassString(TypeElement typeElement, String myPackage) {
@@ -168,7 +178,7 @@ public class LiveDataObserverCreator {
         return mPackageName + "." + mObserverClassName;
     }
 
-    public String getClassName(){
+    public String getClassName() {
         return mObserverClassName;
     }
 

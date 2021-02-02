@@ -1,7 +1,6 @@
 package com.gzc.livedatabus;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.LiveData;
 
 import android.content.Intent;
 import android.os.Bundle;

@@ -37,7 +37,7 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-viewmodel:2.2.0'
     implementation 'androidx.lifecycle:lifecycle-livedata:2.2.0'
 
-    annotationProcessor project(':livedatabus-processor')
     implementation project(':livedatabus')
+    annotationProcessor project(':livedatabus-processor')
 
 }

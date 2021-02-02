@@ -22,6 +22,8 @@ public class SecodeActivity extends AppCompatActivity {
 
     @Observe(threadMode = ThreadMode.MAIN,key="TestBean2",sticky = true)
     public void testBean2(TestBean2 testBean2){
+        LiveDataBus.getInstance().removeSticky(testBean2);
         Log.e("guanzhenchuang","收到消息===>TestBean222222");
+
     }
 }
