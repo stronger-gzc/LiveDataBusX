@@ -1,5 +1,5 @@
-include ':livedatabus'
-include ':livedatabus-processor'
-include ':livedatabus-annotation'
+include ':livedatabusx'
+include ':livedatabusx-processor'
+include ':livedatabusx-annotation'
 include ':app'
-rootProject.name = "LiveDataBus"
+rootProject.name = "LiveDataBusX"
