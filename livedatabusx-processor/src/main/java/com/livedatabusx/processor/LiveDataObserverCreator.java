@@ -60,7 +60,7 @@ public class LiveDataObserverCreator {
                 .append("import com.gzc.livedatabusx.LiveDataBusX;\n\n")
                 .append("import com.gzc.livedatabusx.Observation;\n\n")
                 .append("import java.lang.reflect.Method;\n\n")
-                .append("import static com.livedatabusx.annotion.ThreadMode.*;\n\n")
+                .append("import static com.gzc.livedatabusx.ThreadMode.*;\n\n")
                 .append("public class " + mObserverClassName + " implements LiveDataObserver{\n")
                 .append(generateMethodsCode())
                 .append("\n}");
