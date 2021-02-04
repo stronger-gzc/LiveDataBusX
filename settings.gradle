@@ -1,5 +1,4 @@
 include ':livedatabusx'
 include ':livedatabusx-processor'
 include ':livedatabusx-annotation'
-include ':app'
 rootProject.name = "LiveDataBusX"
