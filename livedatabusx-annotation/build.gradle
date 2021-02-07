@@ -1,4 +1,16 @@
-apply plugin: 'java-library'
+apply plugin: 'java'
+apply from: rootProject.file("gradle/publish.gradle")
+
+uploadArchives {
+    //仓库基于maven
+    repositories{
+        mavenDeployer {
+            pom.version = "0.0.1"
+            pom.artifactId = "livedatabusx-annotation"
+            pom.groupId = "com.gzc"
+        }
+    }
+}
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])

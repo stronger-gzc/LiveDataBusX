@@ -3,11 +3,6 @@ package com.livedatabusx.processor;
 import javax.annotation.processing.Messager;
 import javax.tools.Diagnostic;
 
-/**
- * @author Lance
- * @date 2018/2/22
- */
-
 public class Log {
     private Messager messager;
 
@@ -23,8 +18,11 @@ public class Log {
         messager.printMessage(Diagnostic.Kind.NOTE, msg);
     }
 
+    public void w(String msg){
+        messager.printMessage(Diagnostic.Kind.WARNING,msg);
+    }
+
     public void e(String msg){
         messager.printMessage(Diagnostic.Kind.ERROR,msg);
     }
-
 }

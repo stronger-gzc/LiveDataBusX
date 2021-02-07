@@ -1,0 +1,24 @@
+// Configures common publishing settings.
+
+apply plugin: "maven"
+
+
+// Use afterEvaluate or dependencies might be lost in the generated POM.
+afterEvaluate { project ->
+    uploadArchives {
+        repositories {
+            mavenDeployer {
+                //配置上传的url
+                repository(url: "http://127.0.0.1:8081/repository/com.gzc/") {
+                    authentication(userName: "admin", password: "baobao123")
+                }
+
+
+                // Common properties, projects still need to set name and description.
+                pom.project {
+                    packaging 'aar'
+                }
+            }
+        }
+    }
+}

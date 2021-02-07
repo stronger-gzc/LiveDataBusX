@@ -1,4 +1,5 @@
 apply plugin: 'com.android.library'
+apply from: rootProject.file("gradle/publish.gradle")
 
 android {
     compileSdkVersion 29
@@ -19,6 +20,19 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
+    uploadArchives {
+        //仓库基于maven
+        repositories {
+            mavenDeployer {
+                pom.version = "0.0.1"
+                pom.artifactId = "livedatabusx"
+                pom.groupId = "com.gzc"
+
+            }
+
+        }
+    }
 }
 
 dependencies {
@@ -29,6 +43,5 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-viewmodel:2.2.0'
     implementation 'androidx.lifecycle:lifecycle-livedata:2.2.0'
 
-    implementation project(":livedatabusx-annotation")
-
+    implementation 'com.gzc:livedatabusx-annotation:0.0.1'
 }
