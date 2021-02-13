@@ -1,8 +1,8 @@
 package com.livedatabusx.processor;
 
-import com.livedatabusx.annotion.Observe;
-import com.livedatabusx.annotion.ThreadMode;
-import com.livedatabusx.annotion.Utils;
+import com.livedatabusx.annotation.Observe;
+import com.livedatabusx.annotation.ThreadMode;
+import com.livedatabusx.annotation.Utils;
 
 import java.util.ArrayList;
 import java.util.List;

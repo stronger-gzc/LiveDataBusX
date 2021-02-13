@@ -19,7 +19,8 @@ dependencies {
 
     implementation 'com.google.auto.service:auto-service:1.0-rc2'
     annotationProcessor 'com.google.auto.service:auto-service:1.0-rc2'
-    implementation 'com.gzc:livedatabusx-annotation:0.0.1'
+//    implementation 'com.gzc:livedatabusx-annotation:0.0.1'
+    implementation project(":livedatabusx-annotation")
 
 }
 

@@ -1,4 +1,4 @@
-package com.livedatabusx.annotion;
+package com.livedatabusx.annotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
