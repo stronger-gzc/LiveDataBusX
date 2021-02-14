@@ -34,9 +34,11 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
 
+    implementation 'com.gzc:livedatabusx:1.0.0'
+    annotationProcessor 'com.gzc:livedatabusx-processor:1.0.0'
 //    implementation 'com.gzc:livedatabusx:0.0.1'
-    implementation project(":livedatabusx")
+//    implementation project(":livedatabusx")
 //    annotationProcessor 'com.gzc:livedatabusx-processor:0.0.1'
-    annotationProcessor project(':livedatabusx-processor')
+//    annotationProcessor project(':livedatabusx-processor')
 
 }

@@ -13,14 +13,15 @@ import javax.lang.model.element.TypeElement;
  * describe：所有的LiveDataObserver类都会放在这个类里  key：全类名   value：LiveDataObserver对象
  * */
 public class ObserversCreator {
-    private final String mObserverClassName = "LiveDataObservers";
+    private final String observerClassName;
     private String packageName;
     private Set<? extends Element> elements;
 
 
-    public ObserversCreator(String packageName, Set<? extends Element>elements) {
+    public ObserversCreator(String packageName,String observerClassName,Set<? extends Element>elements) {
         this.packageName = packageName;
         this.elements = elements;
+        this.observerClassName = observerClassName;
     }
 
 
@@ -37,7 +38,7 @@ public class ObserversCreator {
                 .append("import com.gzc.livedatabusx.LiveDataObserver;\n\n")
                 .append("import java.util.HashMap;\n\n")
                 .append("import java.util.Map;\n\n")
-                .append("public class " + mObserverClassName + " implements Observers{\n")
+                .append("public class " + observerClassName + " implements Observers{\n")
                 .append("private static final Map<String,LiveDataObserver>LIVEDATA_MAP;\n\n")
                 .append("static{\n")
                 .append("LIVEDATA_MAP = new HashMap<String,LiveDataObserver>();\n\n")

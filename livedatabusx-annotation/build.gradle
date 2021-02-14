@@ -1,20 +1,27 @@
 apply plugin: 'java'
-apply from: rootProject.file("gradle/publish.gradle")
+//apply from: rootProject.file("gradle/publish.gradle")
 
-uploadArchives {
-    //仓库基于maven
-    repositories{
-        mavenDeployer {
-            pom.version = "0.0.1"
-            pom.artifactId = "livedatabusx-annotation"
-            pom.groupId = "com.gzc"
-        }
-    }
-}
+//uploadArchives {
+//    //仓库基于maven
+//    repositories{
+//        mavenDeployer {
+//            pom.version = "0.0.1"
+//            pom.artifactId = "livedatabusx-annotation"
+//            pom.groupId = "com.gzc"
+//        }
+//    }
+//}
 
-dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
+ext {
+    bintrayName = 'livedatabusx-annotation'
+    artifact = bintrayName
+    libraryName = 'LiveDataBusX annotation'
+    libraryDescription = 'The annotation used in livedatabusx'
+    libraryVersion = livedatabusx_annotation_version
 }
 
 sourceCompatibility = "1.7"
 targetCompatibility = "1.7"
+
+apply from: rootProject.file("gradle/install.gradle")
+apply from: rootProject.file("gradle/bintray.gradle")

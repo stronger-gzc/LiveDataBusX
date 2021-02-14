@@ -71,7 +71,7 @@ public class ObserveProcessor extends AbstractProcessor {
         //通过在项目的gradle中设置的observers值拿到包名
         String observersClassName = processingEnv.getOptions().get(Constants.OBSERVERS_CLASS_NAME);
         String packageName = processingEnv.getOptions().get(Constants.PACKAGE_NAME);
-        ObserversCreator creator = new ObserversCreator(packageName,elements);
+        ObserversCreator creator = new ObserversCreator(packageName,observersClassName,elements);
 
         try {
             JavaFileObject sourceFile = mFilerUtils.createSourceFile(packageName+"."+observersClassName);
