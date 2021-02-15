@@ -1,5 +1,6 @@
 ### **LiveDataBusX的使用**
 **（1）基础配置**
+
 在项目的buld.gradle中添加如下代码（jcenter中没有提交审核，所以需要添加这句，之后审核通过，这句话可以去掉）
 
     allprojects {
@@ -23,6 +24,7 @@
         }
     }
 **（2）初始化操作**
+
 在项目Application的onCreate方法中进行如下操作
 
     public class MyApp extends Application {
@@ -36,12 +38,14 @@
 这里的**MyObservers**类就是上一步设置的**OBSERVERS_CLASS_NAME**的值
 
 **（3）事件监听**
+
 在需要接收事件的类中进行observe，和EventBus的register方法一样，不过不需要解注册，如下
 
     //无动态key
     LiveDataBusX.getInstance().observe(this);
     //有动态key
     LiveDataBusX.getInstance().observe(this,dynamicKey);
+
 **observe方法**有两种：一种是**无动态key**，一种是**有动态key**。在某些业务场景下，key值可能会随某些属性而变化。
 
 之后在类中写如下的方法来接收事件变化
