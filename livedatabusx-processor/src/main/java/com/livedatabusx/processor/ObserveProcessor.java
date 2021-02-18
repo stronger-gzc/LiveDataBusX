@@ -1,7 +1,7 @@
 package com.livedatabusx.processor;
 
 import com.google.auto.service.AutoService;
-import com.livedatabusx.annotion.Observe;
+import com.livedatabusx.annotation.Observe;
 
 import java.io.IOException;
 import java.io.Writer;
@@ -45,6 +45,7 @@ public class ObserveProcessor extends AbstractProcessor {
         log = Log.newLog(processingEnv.getMessager());
         mElementUtils = processingEnv.getElementUtils();
         mFilerUtils = processingEnv.getFiler();
+        log.i("ObserveProcessor初始化!!!!");
     }
 
 
@@ -52,6 +53,8 @@ public class ObserveProcessor extends AbstractProcessor {
     @Override
     public boolean process(Set<? extends TypeElement> set, RoundEnvironment roundEnvironment) {
         map.clear();
+        log.i("ObserveProcessor======>process!!!!");
+
         //得到所有的注解
         Set<? extends Element> elements = roundEnvironment.getElementsAnnotatedWith(Observe.class);
         for (Element element : elements) {
@@ -68,7 +71,7 @@ public class ObserveProcessor extends AbstractProcessor {
         //通过在项目的gradle中设置的observers值拿到包名
         String observersClassName = processingEnv.getOptions().get(Constants.OBSERVERS_CLASS_NAME);
         String packageName = processingEnv.getOptions().get(Constants.PACKAGE_NAME);
-        ObserversCreator creator = new ObserversCreator(packageName,elements);
+        ObserversCreator creator = new ObserversCreator(packageName,observersClassName,elements);
 
         try {
             JavaFileObject sourceFile = mFilerUtils.createSourceFile(packageName+"."+observersClassName);

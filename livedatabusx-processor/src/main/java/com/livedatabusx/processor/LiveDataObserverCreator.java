@@ -1,8 +1,8 @@
 package com.livedatabusx.processor;
 
-import com.livedatabusx.annotion.Observe;
-import com.livedatabusx.annotion.ThreadMode;
-import com.livedatabusx.annotion.Utils;
+import com.livedatabusx.annotation.Observe;
+import com.livedatabusx.annotation.ThreadMode;
+import com.livedatabusx.annotation.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -60,7 +60,7 @@ public class LiveDataObserverCreator {
                 .append("import com.gzc.livedatabusx.LiveDataBusX;\n\n")
                 .append("import com.gzc.livedatabusx.Observation;\n\n")
                 .append("import java.lang.reflect.Method;\n\n")
-                .append("import static com.gzc.livedatabusx.ThreadMode.*;\n\n")
+                .append("import static com.livedatabusx.annotation.ThreadMode.*;\n\n")
                 .append("public class " + mObserverClassName + " implements LiveDataObserver{\n")
                 .append(generateMethodsCode())
                 .append("\n}");

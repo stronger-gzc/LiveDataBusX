@@ -2,7 +2,7 @@ package com.gzc.livedatabusx;
 
 import androidx.lifecycle.LifecycleOwner;
 
-import com.livedatabusx.annotion.ThreadMode;
+import com.livedatabusx.annotation.ThreadMode;
 
 /**
  * author：gzc
