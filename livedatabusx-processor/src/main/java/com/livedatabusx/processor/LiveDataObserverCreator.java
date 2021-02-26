@@ -74,8 +74,8 @@ public class LiveDataObserverCreator {
         StringBuilder methodsClass = new StringBuilder();
         methodsClass
                 .append("@Override\n")
-                .append("public void observe(final LifecycleOwner owner , final String dynamicKey){\n");
-
+                .append("public void observe(final LifecycleOwner owner , final String dynamicKey){\n")
+                .append("LiveDataBusX.getInstance().setObserver(\""+mPackageName+"."+mClassName+"\",this);");
         for (Element element : mVariableElements) {
             Observe annotation = element.getAnnotation(Observe.class);
             //取出Observe中注解的值

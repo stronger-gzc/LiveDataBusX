@@ -1,5 +1,7 @@
 package com.gzc.livedatabusx;
 
+import android.util.Log;
+
 import androidx.lifecycle.LifecycleOwner;
 
 import java.lang.reflect.Method;
@@ -79,11 +81,15 @@ public class LiveDataBusX {
     }
 
     /**
-     * 设置observers，在app初始化的时候设置，建议在application的onCreate方法中
-     * @param observers
+     *
+     * @param key
+     * @param liveDataObserver
      */
-    public void setObservers(Observers observers){
-        liveDataObserverMap.putAll(observers.getObservers());
+    public void setObserver(String key,LiveDataObserver liveDataObserver){
+        Log.e("guanzhenchuang","key:"+key);
+        if(!liveDataObserverMap.containsKey(key)) {
+            liveDataObserverMap.put(key, liveDataObserver);
+        }
     }
 
 
@@ -101,6 +107,7 @@ public class LiveDataBusX {
      * @param dynamicKey 动态key
      */
     public void observe(LifecycleOwner owner,String dynamicKey){
+        Log.e("guanzhenchuang",owner.getClass().getName());
         liveDataObserverMap.get(owner.getClass().getName())
                 .observe(owner,dynamicKey);
     }

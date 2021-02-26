@@ -1,15 +1,15 @@
-apply plugin: 'com.android.application'
+apply plugin: 'com.android.library'
 
 android {
     compileSdkVersion 29
     buildToolsVersion "29.0.3"
 
     defaultConfig {
-        applicationId "com.gzc.app"
         minSdkVersion 21
         targetSdkVersion 29
         versionCode 1
         versionName "1.0"
+
     }
 
     buildTypes {
@@ -23,17 +23,8 @@ android {
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation 'androidx.appcompat:appcompat:1.2.0'
+
+    api project(":livedatabusx")
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
-
-    implementation project(":baselibrary")
     annotationProcessor project(":livedatabusx-processor")
-
-
-//    implementation 'com.gzc:livedatabusx:1.0.0'
-//    annotationProcessor 'com.gzc:livedatabusx-processor:1.0.0'
-//    implementation 'com.gzc:livedatabusx:0.0.1'
-//    implementation project(":livedatabusx")
-//    annotationProcessor 'com.gzc:livedatabusx-processor:0.0.1'
-//    annotationProcessor project(':livedatabusx-processor')
-
 }

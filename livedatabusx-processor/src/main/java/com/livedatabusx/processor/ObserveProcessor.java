@@ -31,7 +31,7 @@ import javax.tools.JavaFileObject;
 @AutoService(Processor.class)
 @SupportedSourceVersion(SourceVersion.RELEASE_7)
 @SupportedAnnotationTypes({Constants.ANNOTATION})
-@SupportedOptions(value = {Constants.OBSERVERS_CLASS_NAME, Constants.PACKAGE_NAME})
+//@SupportedOptions(value = {Constants.OBSERVERS_CLASS_NAME, Constants.PACKAGE_NAME})
 public class ObserveProcessor extends AbstractProcessor {
 
     private Elements mElementUtils;
@@ -64,24 +64,27 @@ public class ObserveProcessor extends AbstractProcessor {
             LiveDataObserverCreator liveDataObserverCreator = map.get(fullClassName);
             if (liveDataObserverCreator == null) {
                 liveDataObserverCreator = new LiveDataObserverCreator(mElementUtils, classElement,processingEnv);
+//                log.e("package:"+mElementUtils.getPackageOf(classElement).getQualifiedName().toString());
                 map.put(fullClassName, liveDataObserverCreator);
             }
             liveDataObserverCreator.putElement(element);
         }
-        //通过在项目的gradle中设置的observers值拿到包名
-        String observersClassName = processingEnv.getOptions().get(Constants.OBSERVERS_CLASS_NAME);
-        String packageName = processingEnv.getOptions().get(Constants.PACKAGE_NAME);
-        ObserversCreator creator = new ObserversCreator(packageName,observersClassName,elements);
-
-        try {
-            JavaFileObject sourceFile = mFilerUtils.createSourceFile(packageName+"."+observersClassName);
-            Writer writer = sourceFile.openWriter();
-            writer.write(creator.generateClassCode());
-            writer.flush();
-            writer.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+//        //通过在项目的gradle中设置的observers值拿到包名
+//        String observersClassName = processingEnv.getOptions().get(Constants.OBSERVERS_CLASS_NAME);
+////        log.e("observersClassName:"+observersClassName);
+//        String packageName = processingEnv.getOptions().get(Constants.PACKAGE_NAME);
+////        log.e("packageName:"+packageName);
+//        ObserversCreator creator = new ObserversCreator(packageName,observersClassName,elements);
+//
+//        try {
+//            JavaFileObject sourceFile = mFilerUtils.createSourceFile(packageName+"."+observersClassName);
+//            Writer writer = sourceFile.openWriter();
+//            writer.write(creator.generateClassCode());
+//            writer.flush();
+//            writer.close();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
 
 
         //通过遍历mProxyMap，创建java文件

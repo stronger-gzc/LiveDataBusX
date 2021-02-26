@@ -1,10 +1,8 @@
-package com.gzc.app;
+package com.gzc.baselibrary;
 
 import android.app.Application;
 
 import com.gzc.livedatabusx.LiveDataBusX;
-
-//import com.gzc.livedatabusx.LiveDataBusX;
 
 /**
  * User: Administrator
@@ -15,7 +13,7 @@ public class MyApp extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        LiveDataBusX.getInstance()
-                .setObservers(new MyObservers());
+//        LiveDataBusX.getInstance()
+//                .setObservers(new MyObservers());
     }
 }

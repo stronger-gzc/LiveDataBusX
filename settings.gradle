@@ -1,3 +1,4 @@
+include ':baselibrary'
 include ':app'
 include ':livedatabusx'
 include ':livedatabusx-processor'
