@@ -12,6 +12,10 @@
             }
         }
     }
+在module项目中进行依赖：
+
+    implementation 'com.gzc:livedatabusx:1.0.0'
+    annotationProcessor 'com.gzc:livedatabusx-processor:1.0.0'
 
 **（2）初始化操作**
 
