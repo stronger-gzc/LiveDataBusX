@@ -13,16 +13,6 @@
         }
     }
 
-在module的build.gradle中的defaultConfig中添加
-
-    javaCompileOptions {
-        annotationProcessorOptions {
-            arguments = [
-                    OBSERVERS_CLASS_NAME: "MyObservers",
-                    PACKAGE_NAME        : "com.gzc.app"
-            ]
-        }
-    }
 **（2）初始化操作**
 
 在项目Application的onCreate方法中进行如下操作
@@ -31,11 +21,9 @@
         @Override
         public void onCreate() {
             super.onCreate();
-            LiveDataBusX.getInstance()
-                    .setObservers(new MyObservers());
+            LiveDataBusX.getInstance().init();
         }
     }
-这里的**MyObservers**类就是上一步设置的**OBSERVERS_CLASS_NAME**的值
 
 **（3）事件监听**
 

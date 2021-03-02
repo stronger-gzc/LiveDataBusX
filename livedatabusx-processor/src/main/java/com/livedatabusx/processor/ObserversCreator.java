@@ -1,5 +1,7 @@
 package com.livedatabusx.processor;
 
+import com.livedatabusx.annotation.Constants;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -12,6 +14,7 @@ import javax.lang.model.element.TypeElement;
  * date：2021/1/26
  * describe：所有的LiveDataObserver类都会放在这个类里  key：全类名   value：LiveDataObserver对象
  * */
+@Deprecated
 public class ObserversCreator {
     private final String observerClassName;
     private String packageName;
@@ -65,7 +68,7 @@ public class ObserversCreator {
             //key就是全类名
             String key = packageName+"."+className;
             if(!tempMap.containsKey(key)){
-                tempMap.put(key,className+Constants.SUFFIX);
+                tempMap.put(key,className+ Constants.SUFFIX);
             }
             key = null;
 

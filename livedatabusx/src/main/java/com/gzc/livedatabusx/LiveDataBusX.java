@@ -1,12 +1,19 @@
 package com.gzc.livedatabusx;
 
+import android.content.Context;
+import android.content.pm.PackageManager;
 import android.util.Log;
 
 import androidx.lifecycle.LifecycleOwner;
 
+
+import com.livedatabusx.annotation.Constants;
+
+import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -22,7 +29,7 @@ public class LiveDataBusX {
 
     private static LiveDataBusX sInstance;
 
-    private Map<String,LiveDataObserver> liveDataObserverMap = new HashMap<>();
+    private Map<String, LiveDataObserver> liveDataObserverMap = new HashMap<>();
 
     private final ExecutorService executorService;
 
@@ -30,16 +37,17 @@ public class LiveDataBusX {
     private final BackgroundPoster backgroundPoster;
 
 
-    private LiveDataBusX(){
+
+    private LiveDataBusX() {
         executorService = DEFAULT_EXECUTOR_SERVICE;
         asyncPoster = new AsyncPoster(this);
         backgroundPoster = new BackgroundPoster(this);
     }
 
-    public static LiveDataBusX getInstance(){
-        if(sInstance==null){
-            synchronized (LiveDataBusX.class){
-                if(sInstance==null){
+    public static LiveDataBusX getInstance() {
+        if (sInstance == null) {
+            synchronized (LiveDataBusX.class) {
+                if (sInstance == null) {
                     sInstance = new LiveDataBusX();
                 }
             }
@@ -53,11 +61,12 @@ public class LiveDataBusX {
 
     /**
      * 不带动态key的发送
+     *
      * @param key
      * @param object
      */
-    public void post(String key,Object object){
-        if(object!=null){
+    public void post(String key, Object object) {
+        if (object != null) {
             Bus.getInstance()
                     .with(key)
                     .postValue(object);
@@ -66,13 +75,14 @@ public class LiveDataBusX {
 
     /**
      * 带动态key的发送
+     *
      * @param key
      * @param dynamicKey
      * @param object
      */
-    public void post(String key,String dynamicKey,Object object){
-        if(object!=null){
-            String combinationKey = key+"::"+dynamicKey;
+    public void post(String key, String dynamicKey, Object object) {
+        if (object != null) {
+            String combinationKey = key + "::" + dynamicKey;
             Bus.getInstance()
                     .with(combinationKey)
                     .postValue(object);
@@ -81,43 +91,59 @@ public class LiveDataBusX {
     }
 
     /**
-     *
-     * @param key
-     * @param liveDataObserver
+     * 初始化
      */
-    public void setObserver(String key,LiveDataObserver liveDataObserver){
-        Log.e("guanzhenchuang","key:"+key);
-        if(!liveDataObserverMap.containsKey(key)) {
-            liveDataObserverMap.put(key, liveDataObserver);
+    public void init(Context context) {
+        try {
+            Set<String> routerMap = ClassUtils.getFileNameByPackageName(context, Constants.LIVEDATABUSX_PACKAGE_NAME);
+            for (String className : routerMap) {
+                Class<?> claszz = Class.forName(className);
+                liveDataObserverMap.put(className,(LiveDataObserver) claszz.newInstance());
+            }
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
         }
+
     }
 
 
     /**
      * 相当于register，不带动态key
+     *
      * @param owner
      */
-    public void observe(LifecycleOwner owner){
-        observe(owner,null);
+    public void observe(LifecycleOwner owner) {
+        observe(owner, null);
     }
 
     /**
      * 相当于register
+     *
      * @param owner
      * @param dynamicKey 动态key
      */
-    public void observe(LifecycleOwner owner,String dynamicKey){
-        Log.e("guanzhenchuang",owner.getClass().getName());
-        liveDataObserverMap.get(owner.getClass().getName())
-                .observe(owner,dynamicKey);
+    public void observe(LifecycleOwner owner, String dynamicKey) {
+        String key = Constants.LIVEDATABUSX_PACKAGE_NAME+"."+owner.getClass().getSimpleName()+Constants.SUFFIX;
+        liveDataObserverMap.get(key)
+                .observe(owner, dynamicKey);
     }
 
 
     /**
      * 切换线程
      */
-    public void postToThread(final Observation observation){
-        switch (observation.threadMode){
+    public void postToThread(final Observation observation) {
+        switch (observation.threadMode) {
             case MAIN:
                 invokeSubscriber(observation);
                 break;
@@ -135,7 +161,7 @@ public class LiveDataBusX {
      */
     void invokeSubscriber(Observation observation) {
         //判断一下owner是否处于活跃状态
-        if(!active(observation.owner)){
+        if (!active(observation.owner)) {
             return;
         }
         try {
@@ -156,10 +182,11 @@ public class LiveDataBusX {
 
     /**
      * LifecycleOwner 是否处于活跃状态
+     *
      * @param owner
      * @return
      */
-    private boolean active(LifecycleOwner owner){
+    private boolean active(LifecycleOwner owner) {
         return owner.getLifecycle().getCurrentState().isAtLeast(STARTED);
     }
 }

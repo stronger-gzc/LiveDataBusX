@@ -13,6 +13,7 @@ apply plugin: 'java'
 //}
 
 ext {
+
     bintrayName = 'livedatabusx-annotation'
     artifact = bintrayName
     libraryName = 'LiveDataBusX annotation'
@@ -22,6 +23,7 @@ ext {
 
 sourceCompatibility = "1.7"
 targetCompatibility = "1.7"
+
 
 apply from: rootProject.file("gradle/install.gradle")
 apply from: rootProject.file("gradle/bintray.gradle")

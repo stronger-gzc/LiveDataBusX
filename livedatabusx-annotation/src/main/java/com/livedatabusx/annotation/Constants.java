@@ -1,4 +1,4 @@
-package com.livedatabusx.processor;
+package com.livedatabusx.annotation;
 
 /**
  * author：gzc
@@ -7,8 +7,7 @@ package com.livedatabusx.processor;
  */
 public class Constants {
     public final static String SUFFIX = "LiveDataObserver";
-    public static final String OBSERVERS_CLASS_NAME = "OBSERVERS_CLASS_NAME";
-    public static final String PACKAGE_NAME = "PACKAGE_NAME";
+    public static final String LIVEDATABUSX_PACKAGE_NAME = "com.livedatabusx.android.observers";
     public static final String ANNOTATION = "com.livedatabusx.annotation.Observe";
 
 

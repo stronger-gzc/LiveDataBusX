@@ -10,6 +10,7 @@ android {
         versionCode 1
         versionName "1.0"
 
+
     }
 
     buildTypes {
@@ -23,8 +24,10 @@ android {
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation 'androidx.appcompat:appcompat:1.2.0'
-
-    api project(":livedatabusx")
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
-    annotationProcessor project(":livedatabusx-processor")
+
+    api "com.gzc:livedatabusx:1.0.0"
+    annotationProcessor "com.gzc:livedatabusx-processor:1.0.0"
+
+
 }

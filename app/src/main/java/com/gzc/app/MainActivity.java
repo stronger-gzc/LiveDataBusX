@@ -1,53 +1,65 @@
 package com.gzc.app;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
 
-//import com.gzc.livedatabusx.LiveDataBusX;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.LiveData;
+
 import com.gzc.baselibrary.SecondActivity;
 import com.gzc.baselibrary.Test1Bean;
 import com.gzc.baselibrary.Test2Bean;
+import com.gzc.baselibrary.Test3Bean;
 import com.gzc.livedatabusx.LiveDataBusX;
 import com.livedatabusx.annotation.Observe;
 import com.livedatabusx.annotation.ThreadMode;
 
 
 public class MainActivity extends AppCompatActivity {
-
+    private TextView dataView;
+    private int index;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        LiveDataBusX.getInstance().observe(this);
+        dataView = (TextView) findViewById(R.id.data_view);
 
-//        LiveDataBusX.getInstance()
-//                .post("test1",new Test1Bean());
-//
-//        LiveDataBusX.getInstance()
-//                .post("test1","动态key",new Test1Bean());
+        FragmentTransaction transaction = this.getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.frame_layout,BlankFragment.newInstance());
+        transaction.commit();
+
+        LiveDataBusX.getInstance().observe(this);
+    }
+
+    @Observe(threadMode = ThreadMode.MAIN,key = "MainActivity")
+    public void getData(String data){
+        dataView.setText(data);
+    }
+
+    @Observe(threadMode = ThreadMode.MAIN,key = "TestBean3")
+    public void getData2(Test3Bean test3Bean){
+        Log.e("guanzhenchuang","收到Second的数据");
     }
 
     /**
-     * （1）接收事件的方法在主线程
-     * （2）非粘性
-     * （3）动态key
-     * @param test1Bean
+     * 发送数据到BlankFragment
+     * @param view
      */
-    @Observe(threadMode = ThreadMode.MAIN,sticky = false,append = true,key = "test1")
-    public void test1(Test1Bean test1Bean){
-
+    public void sendDataToFragment(View view) {
+        LiveDataBusX.getInstance().post("BlankFragment","MainActivity发来了数据！+"+index++);
     }
 
-    public void sendData(View view) {
-        LiveDataBusX.getInstance().post("TestBean",new Test2Bean());
-        startActivity(new Intent(this, SecondActivity.class));
+    /**
+     * 跳转到SecondActivity
+     * @param view
+     */
+    public void jumpToSecond(View view) {
+        LiveDataBusX.getInstance().post("TestBean1",new Test1Bean());
+        LiveDataBusX.getInstance().post("TestBean2",new Test2Bean());
+        startActivity(new Intent(this,SecondActivity.class));
     }
-
-//    @Observe(threadMode = ThreadMode.MAIN,key = "test1")
-//    public void test2(Test1Bean test1Bean){
-//
-//    }
 }

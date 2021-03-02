@@ -1,5 +1,6 @@
 package com.livedatabusx.processor;
 
+import com.livedatabusx.annotation.Constants;
 import com.livedatabusx.annotation.Observe;
 import com.livedatabusx.annotation.ThreadMode;
 import com.livedatabusx.annotation.Utils;
@@ -23,7 +24,6 @@ import javax.lang.model.util.Elements;
  */
 public class LiveDataObserverCreator {
     private String mObserverClassName;
-    private String mPackageName;
     private String mClassName;//所属类名
     private TypeElement mTypeElement;
     private List<Element> mVariableElements = new ArrayList<>();
@@ -31,10 +31,7 @@ public class LiveDataObserverCreator {
 
     public LiveDataObserverCreator(Elements elementUtils, TypeElement classElement, ProcessingEnvironment processingEnv) {
         this.mTypeElement = classElement;
-        PackageElement packageElement = elementUtils.getPackageOf(mTypeElement);
-        String packageName = packageElement.getQualifiedName().toString();
         mClassName = mTypeElement.getSimpleName().toString();
-        this.mPackageName = packageName;
         this.mObserverClassName = mClassName + Constants.SUFFIX;
         this.processingEnv = processingEnv;
 
@@ -52,7 +49,7 @@ public class LiveDataObserverCreator {
     public String generateClassCode() {
         StringBuilder classCode = new StringBuilder();
         classCode
-                .append("package " + mPackageName + ";\n\n")
+                .append("package " + Constants.LIVEDATABUSX_PACKAGE_NAME + ";\n\n")
                 .append("import androidx.lifecycle.LifecycleOwner;\n\n")
                 .append("import androidx.lifecycle.Observer;\n\n")
                 .append("import com.gzc.livedatabusx.LiveDataObserver;\n\n")
@@ -74,8 +71,7 @@ public class LiveDataObserverCreator {
         StringBuilder methodsClass = new StringBuilder();
         methodsClass
                 .append("@Override\n")
-                .append("public void observe(final LifecycleOwner owner , final String dynamicKey){\n")
-                .append("LiveDataBusX.getInstance().setObserver(\""+mPackageName+"."+mClassName+"\",this);");
+                .append("public void observe(final LifecycleOwner owner , final String dynamicKey){\n");
         for (Element element : mVariableElements) {
             Observe annotation = element.getAnnotation(Observe.class);
             //取出Observe中注解的值
@@ -93,7 +89,7 @@ public class LiveDataObserverCreator {
             VariableElement param = parameters.get(0);
             TypeMirror paramType = param.asType();
             TypeElement paramElement = (TypeElement) processingEnv.getTypeUtils().asElement(paramType);
-            String eventClass = getClassString(paramElement, mPackageName);
+            String eventClass = getClassString(paramElement, Constants.LIVEDATABUSX_PACKAGE_NAME);
 
             if (Utils.isEmpty(annotationKey)) {
                 throw new RuntimeException("key不能为空");
@@ -168,12 +164,10 @@ public class LiveDataObserverCreator {
         }
     }
 
-    public String getPackageName() {
-        return mPackageName;
-    }
+
 
     public String getClassFullName() {
-        return mPackageName + "." + mObserverClassName;
+        return Constants.LIVEDATABUSX_PACKAGE_NAME + "." + mObserverClassName;
     }
 
     public String getClassName() {

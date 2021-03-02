@@ -1,6 +1,7 @@
 package com.livedatabusx.processor;
 
 import com.google.auto.service.AutoService;
+import com.livedatabusx.annotation.Constants;
 import com.livedatabusx.annotation.Observe;
 
 import java.io.IOException;
@@ -31,7 +32,6 @@ import javax.tools.JavaFileObject;
 @AutoService(Processor.class)
 @SupportedSourceVersion(SourceVersion.RELEASE_7)
 @SupportedAnnotationTypes({Constants.ANNOTATION})
-//@SupportedOptions(value = {Constants.OBSERVERS_CLASS_NAME, Constants.PACKAGE_NAME})
 public class ObserveProcessor extends AbstractProcessor {
 
     private Elements mElementUtils;

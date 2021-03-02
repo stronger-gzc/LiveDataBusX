@@ -10,6 +10,8 @@ android {
         targetSdkVersion 29
         versionCode 1
         versionName "1.0"
+
+
     }
 
     buildTypes {
@@ -26,14 +28,8 @@ dependencies {
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
 
     implementation project(":baselibrary")
-    annotationProcessor project(":livedatabusx-processor")
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    annotationProcessor "com.gzc:livedatabusx-processor:1.0.0"
 
-
-//    implementation 'com.gzc:livedatabusx:1.0.0'
-//    annotationProcessor 'com.gzc:livedatabusx-processor:1.0.0'
-//    implementation 'com.gzc:livedatabusx:0.0.1'
-//    implementation project(":livedatabusx")
-//    annotationProcessor 'com.gzc:livedatabusx-processor:0.0.1'
-//    annotationProcessor project(':livedatabusx-processor')
 
 }
